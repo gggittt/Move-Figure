@@ -33,6 +33,20 @@ public class BonusManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        var bonuses = FindObjectsOfType<ReduceSizeFigure>();
+        foreach (var point in bonuses)
+        {
+            point.OnClick += BonusClickHandler;
+        }
+    }
+
+    private void BonusClickHandler(ReduceSizeFigure sender)
+    {
+        SelectBonus(sender);
+    }
+
     private void Start()
     {
         _uiEnergy.gameObject.SetActive(true);//а по умолчанию типа выкл, чтобы если bonuses logic отключен - в ui место не занимала и не путала игрока
@@ -48,6 +62,7 @@ public class BonusManager : MonoBehaviour
     private void ShowLackEnergyMessage()
     {
         Debug.Log($"<color=red> Не хватает энергии. </color>");
+        Deselect();
     }
 
 
@@ -57,6 +72,11 @@ public class BonusManager : MonoBehaviour
         Debug.Log($"<color=green> применил бонус {_selectedBonuses}  </color>");
 
         Destroy(_selectedBonuses.gameObject);
+        Deselect();
+    }
+
+    private void Deselect()
+    {
         _selectedBonuses = null; //и так обнулится же
     }
 }

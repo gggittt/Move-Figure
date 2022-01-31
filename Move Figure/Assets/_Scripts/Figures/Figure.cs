@@ -6,10 +6,8 @@ using UnityEngine;
 public class Figure : MonoBehaviour
 {
     
-    
-
     [SerializeField] protected int _size = 5;
-
+    
     private void OnValidate()
     {
         SetScale();

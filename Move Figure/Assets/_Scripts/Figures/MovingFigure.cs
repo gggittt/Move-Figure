@@ -13,7 +13,7 @@ public class MovingFigure : Figure
         _size -= amount;
         CalculateScale();
     }
-    
+
     protected override void SetScale()
     {
         CalculateScale();
@@ -27,16 +27,21 @@ public class MovingFigure : Figure
         DrawWithNewScale(newSquareScale);
     }
 
-    private void DrawWithNewScale(float newSquareScale)//в родителя
+    private void DrawWithNewScale(float newSquareScale) //в родителя
     {
         transform.localScale = new Vector3(newSquareScale, newSquareScale, newSquareScale);
+    }
+
+    private void OnDisable()
+    {
+        OnClick = null;
     }
 
     private void OnMouseDown()
     {
         FindObjectOfType<BonusManager>()?.TryApplyBonuses(this);
-        
+
         OnClick?.Invoke(this);
-        FindObjectOfType<MovingFigureSelector>().Select(this);
+        //FindObjectOfType<FigureSelector>().Select(this);
     }
 }
