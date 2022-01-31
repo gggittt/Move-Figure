@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
-
-public class MovingFigure : MonoBehaviour
+public class MovingFigure : Figure
 {
     public Action<MovingFigure> OnClick;
-    [SerializeField] private int _size = 7; //отдалить камеру, чтобы хватало клеток?
     public int Size => _size;
 
     public void ReduceSize(int amount)
@@ -16,8 +13,8 @@ public class MovingFigure : MonoBehaviour
         _size -= amount;
         CalculateScale();
     }
-
-    private void OnValidate()
+    
+    protected override void SetScale()
     {
         CalculateScale();
     }
@@ -37,7 +34,7 @@ public class MovingFigure : MonoBehaviour
 
     private void OnMouseDown()
     {
-        FindObjectOfType<BonusSelector>()?.TryApplyBonuses(this);
+        FindObjectOfType<BonusManager>()?.TryApplyBonuses(this);
         
         OnClick?.Invoke(this);
         FindObjectOfType<MovingFigureSelector>().Select(this);

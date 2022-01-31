@@ -3,17 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BonusSelector : MonoBehaviour
+public class BonusManager : MonoBehaviour
 {
-    private BonusFigure _selectedBonus;
+    private ReduceSizeFigure _selectedBonuses;
     [SerializeField] private int _energyAmount = 2;
     [SerializeField] private UiEnergy _uiEnergy;
+    
+    
 
 
-    public void SelectBonus(BonusFigure bonusFigure)
+    public void SelectBonus(ReduceSizeFigure reduceSizeFigure)
     {
-        Debug.Log($"<color=cyan> выбран бонус {bonusFigure}  </color>");
-        _selectedBonus = bonusFigure;
+        Debug.Log($"<color=cyan> выбран бонус {reduceSizeFigure}  </color>");
+        _selectedBonuses = reduceSizeFigure;
     }
 
     public void TryApplyBonuses(MovingFigure movingFigure)
@@ -24,7 +26,7 @@ public class BonusSelector : MonoBehaviour
             return;
         }
 
-        if (_selectedBonus)
+        if (_selectedBonuses)
         {
             ReduceEnergy();
             ApplyBonus(movingFigure);
@@ -51,10 +53,10 @@ public class BonusSelector : MonoBehaviour
 
     private void ApplyBonus(MovingFigure movingFigure)
     {
-        movingFigure.ReduceSize(_selectedBonus.BonusAmount);
-        Debug.Log($"<color=green> применил бонус {_selectedBonus}  </color>");
+        movingFigure.ReduceSize(_selectedBonuses.BonusAmount);
+        Debug.Log($"<color=green> применил бонус {_selectedBonuses}  </color>");
 
-        Destroy(_selectedBonus.gameObject);
-        _selectedBonus = null; //и так обнулится же
+        Destroy(_selectedBonuses.gameObject);
+        _selectedBonuses = null; //и так обнулится же
     }
 }

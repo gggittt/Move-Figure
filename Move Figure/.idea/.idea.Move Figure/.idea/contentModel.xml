@@ -8,13 +8,12 @@
       <e p="Assets" t="Include">
         <e p="_Scripts" t="Include">
           <e p="Bonuses" t="Include">
-            <e p="BonusSelector.cs" t="Include" />
-            <e p="ReduceSize" t="Include">
-              <e p="BonusFigure.cs" t="Include" />
-            </e>
+            <e p="BonusManager.cs" t="Include" />
+            <e p="ReduceSizeFigure.cs" t="Include" />
             <e p="UiEnergy.cs" t="Include" />
           </e>
           <e p="Figures" t="Include">
+            <e p="Figure.cs" t="Include" />
             <e p="FigureForFilling.cs" t="Include" />
             <e p="MovingFigure.cs" t="Include" />
           </e>

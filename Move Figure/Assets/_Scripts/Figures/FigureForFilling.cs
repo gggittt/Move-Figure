@@ -3,24 +3,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
 
-public class FigureForFilling : MonoBehaviour
+public class FigureForFilling : Figure
 {
     public bool IsFilled;
-    private MovingFigure _filledBy;
-    [SerializeField] private int _size = 6;
+    //private MovingFigure _filledBy;
+    
+    public Action<FigureForFilling> OnClick;
+    public event Action<float> OnHealthPctChanged = delegate {  }; // delegate (float f) {  };
 
-    private void OnValidate()
+    
+    
+    public void Some()
     {
-        transform.localScale = new Vector3(_size, _size, _size);
+        OnHealthPctChanged += HandleHealthChanged;
+        OnHealthPctChanged(4f);//= X?.Invoke();
+        OnHealthPctChanged = null;
+    }
+
+    private void HandleHealthChanged(float obj)
+    {
+        Debug.Log($"<color=black> {obj}  </color>");
     }
 
     private void OnMouseDown()
     {
-        var figureToMove = 
-        FindObjectOfType<MovingFigureSelector>().GetSelected();
+        Debug.Log($"<color=cyan> клик на круг  </color>");
+        OnClick?.Invoke(this);
 
+        
+        var figureToMove = 
+
+        FindObjectOfType<MovingFigureSelector>().GetSelected();
         if (figureToMove == null)
         {
             Debug.Log($"<color=red> Not selected  </color>");
@@ -48,7 +62,7 @@ public class FigureForFilling : MonoBehaviour
 
     private void MoveSelected(MovingFigure figureToMove)
     {
-        _filledBy = figureToMove;
+        //_filledBy = figureToMove;
         IsFilled = true;
         figureToMove.transform.position = transform.position;
         FindObjectOfType<Player>().AddSuccessfulMove();
