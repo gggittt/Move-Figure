@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
@@ -14,8 +11,6 @@ public class Player : MonoBehaviour
     [SerializeField] private UiEnergy _prefabUiEnergy;//и потом результат прокинуть в BonusSelector/ да и сам BonusSelector тоже инстанциировать из префаба? бред!
     
     
-
-    public int Moves { get; set; }
 
     public void AddSuccessfulMove()
     {
