@@ -1,24 +1,50 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelSelector : MonoBehaviour
 {
-    //private const int FromArrayToHumanDimension = 1;
-    [SerializeField] private string  _levelsScenesNameBegin = "Level";
+    [SerializeField] private string _levelsScenesNameBegin = "Level";
     
+    [SerializeField] private InputField _startEnergyInput;
+
+
+    public void OnUseBonusesToggleChanged(bool shouldUseBonuses)
+    {
+        GameData.UseBonuses = shouldUseBonuses;
+
+        _startEnergyInput.gameObject.SetActive(shouldUseBonuses);
+    }
 
     public void LoadLevel(int index)
     {
-        //index += FromArrayToHumanDimension;
-
-        Debug.Log($"<color=cyan> LoadLevel= {index} </color>");
+        if (GameData.UseBonuses)
+        {
+            var isEnergyAmountInstalled = TrySetStartEnergy();
+            if (isEnergyAmountInstalled == false )
+            {
+                return;
+            }
+        }
 
         SceneManager.LoadScene(_levelsScenesNameBegin + index);
     }
+
     
+    private bool TrySetStartEnergy()
+    {
+        var isParsed = int.TryParse(_startEnergyInput.text, out int result);
+        
+        if (isParsed == false)
+        {
+            Debug.Log($"<color=red> Введите количество энергии  </color>");
+            return false;
+        }
+
+        Debug.Log($"<color=green> GameData.StartEnergy = {result}  </color>");
+
+        GameData.StartEnergy = result;
+        return true;
+    }
 
 }
-
-

@@ -15,7 +15,7 @@ public class ReduceSizeFigure : Figure
     
     private void OnMouseDown()
     {
-        OnClick.Invoke(this);
+        OnClick?.Invoke(this);
     }
 }
 

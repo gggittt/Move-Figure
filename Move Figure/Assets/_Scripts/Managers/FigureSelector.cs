@@ -2,9 +2,12 @@
 
 public class FigureSelector : MonoBehaviour
 {
-    private MovingFigure _selected;
-    //private FigureForFilling[] _figuresForFilling;
-    //private MovingFigure[] _movingFigures;
+    private PieceToMove _selected;
+    
+    [SerializeField] private BonusManager _bonusManager;
+    [SerializeField] private Player _player;
+    [SerializeField] private GameOver _gameOver;
+
 
     private void Awake()
     {
@@ -12,50 +15,56 @@ public class FigureSelector : MonoBehaviour
         InitSquares();
     }
 
-    private void SquareClickHandler(MovingFigure sender)
+    private void SquareClickHandler(PieceToMove sender)
     {
+        if (_bonusManager)
+            _bonusManager.TryApplyBonuses(sender);
+        
         _selected = sender;
     }
-    
-    private void CircleClickHandler(FigureForFilling sender)
+
+    private void CircleClickHandler(PieceForFilling sender)
     {
-        
         if (_selected == null)
         {
-            Debug.Log($"<color=red> Not selected  </color>");
+            Debug.Log($"<color=red> Moving piece was not selected  </color>");
+            return;
+        }
+
+        if (sender.IsFilled)
+        {
+            Debug.Log($"<color=red> Already filled!  </color>");
             return;
         }
         
-        
         if (_selected.Size <= sender.Size)
         {
-            MoveSelected(sender.transform.position);
+            MoveSelected(sender);
             sender.IsFilled = true;
 
-            FindObjectOfType<GameOver>().CheckWin();
+            _gameOver.CheckWin();
         }
         else
         {
             HandleMistake();
         }
     }
+
     private void HandleMistake()
     {
-        
+        Debug.Log($"<color=red> не сошлись радиусы  </color>");
     }
 
-    private void MoveSelected(Vector3 targetPosition)
+    private void MoveSelected(PieceForFilling target)
     {
-        //_filledBy = figureToMove;
-        _selected.transform.position = targetPosition;
-        FindObjectOfType<Player>().AddSuccessfulMove();
-
+        _selected.MoveTo(target);
+        _player.AddSuccessfulMove();
     }
-    
+
 
     private void InitSquares()
     {
-        var movingFigures = FindObjectsOfType<MovingFigure>();
+        var movingFigures = FindObjectsOfType<PieceToMove>();
         foreach (var point in movingFigures)
         {
             point.OnClick += SquareClickHandler;
@@ -64,11 +73,10 @@ public class FigureSelector : MonoBehaviour
 
     private void InitCircles()
     {
-        var figuresForFilling = FindObjectsOfType<FigureForFilling>();
+        var figuresForFilling = FindObjectsOfType<PieceForFilling>();
         foreach (var point in figuresForFilling)
         {
             point.OnClick += CircleClickHandler;
         }
     }
-    
 }

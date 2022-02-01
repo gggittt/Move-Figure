@@ -1,10 +1,11 @@
 ﻿using System;
 using UnityEngine;
 
-public class MovingFigure : Figure
+public class PieceToMove : Figure
 {
-    public Action<MovingFigure> OnClick;
+    public Action<PieceToMove> OnClick;
     public int Size => _size;
+    private PieceForFilling _lastFilled;
 
     public void ReduceSize(int amount)
     {
@@ -23,11 +24,10 @@ public class MovingFigure : Figure
         var newSquareScale = _size * (float) squareDiagonalCoefficient;
 
         DrawWithNewScale(newSquareScale);
-    }
-
-    private void DrawWithNewScale(float newSquareScale) //в родителя
-    {
-        transform.localScale = new Vector3(newSquareScale, newSquareScale, newSquareScale);
+        void DrawWithNewScale(float squareScale)
+        {
+            transform.localScale = new Vector3(squareScale, squareScale, squareScale);
+        }
     }
 
     private void OnDisable()
@@ -37,9 +37,17 @@ public class MovingFigure : Figure
 
     private void OnMouseDown()
     {
-        FindObjectOfType<BonusManager>()?.TryApplyBonuses(this);
-
         OnClick?.Invoke(this);
-        //FindObjectOfType<FigureSelector>().Select(this);
+    }
+
+    public void MoveTo(PieceForFilling target)
+    {
+        if (_lastFilled)
+        {
+            _lastFilled.IsFilled = false;
+        }
+        
+        transform.position = target.transform.position;
+        _lastFilled = target;
     }
 }
